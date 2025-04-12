@@ -1,12 +1,13 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 let todoSchema = new Schema({
-    
+    userId: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     title: String,
     description: String,
     isCompleted: {type: Boolean, default: false}
 })
 
-let todos = mongoose.model(todos, todoSchema); // model(< name of the collection in db, not found create new with the same name>)
+let Todo = mongoose.model('Todo', todoSchema);
 
-module.exports = todos;
+module.exports = Todo;

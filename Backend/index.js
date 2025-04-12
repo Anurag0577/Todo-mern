@@ -2,12 +2,13 @@ const express = require('express')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
-const users = require('./Models/User')
-const todos = require('./Models/Todos')
+const User = require('./Models/User')
+const Todo = require('./Models/Todos')
 
 const PORT = 3000
 
 const app = express() // create an instance of express
+
 
 app.use(express.json()) // This line is required if you plan to handle JSON data in your requests (like POST requests with JSON bodies). It's a middleware that parses incoming JSON payloads.
 
@@ -32,20 +33,24 @@ function generateJwt(user){
     return token;
 }
 
-function authenticateUser(){
-    let token = req.header.authorise.split(' ')[1];
-    console.log(`Token is ${token}`);
-    let user = jwt.verify(token, (err, data) => {
-        return data
-    } )
-    req.user = user
-    next()
+function authenticateUser(req, res, next){
+    try {
+        let token = req.headers.authorization.split(' ')[1];
+        console.log(`Token is ${token}`);
+        let user = jwt.verify(token, 'aNuRaG');
+        req.user = user;
+        next();
+    } catch (err) {
+        res.status(401).json({
+            message: "Invalid or expired token"
+        });
+    }
 }
 
 //SIGNUP
 app.post('/api/signup', (req, res) => {
-        let newUser = req.body;
-        let user = new users({
+    let newUser = req.body;
+    let user = new User({
         username: newUser.username,
         email: newUser.email,
         password: newUser.password
@@ -58,9 +63,10 @@ app.post('/api/signup', (req, res) => {
     })
 })
 
+// LOGIN
 app.post('/api/login', (req, res) => {
     let userCred = req.body;
-    users.findOne({
+    User.findOne({
         username: userCred.username,
         password: userCred.password
     })
@@ -85,8 +91,10 @@ app.post('/api/login', (req, res) => {
     });
 })
 
+
+// GET ALL TODOS
 app.get('/todos', authenticateUser, (req, res) => {
-    todos.find()
+    Todo.find({ userId: req.user._id })
         .then((todos) => {
             res.json(todos);
         })
@@ -98,11 +106,108 @@ app.get('/todos', authenticateUser, (req, res) => {
         });
 });
 
+// ADD NEW TODO
+app.post('/todo', authenticateUser, (req, res) => {
+    let newTodo = new Todo({
+        userId: req.user._id,
+        title: req.body.title,
+        description: req.body.description,
+        isCompleted: req.body.isCompleted
+    })
 
+    newTodo.save()
+    .then(() => {
+        res.status(201).json({
+            message: "Todo Added Successfully",
+            todo: newTodo
+        });
+    })
+    .catch((error) => {
+        res.status(500).json({
+            message: "Error adding todo",
+            error: error
+        });
+    });
+});
+
+// MODIFY EXISTING TODO
+app.put('/todos/:id', authenticateUser, (req, res) => {
+    let todoId = req.params.id;
+    
+    Todo.findById(todoId)
+        .then((todo) => {
+            if (!todo) {
+                return res.status(404).json({
+                    message: "Todo not found"
+                });
+            }
+
+            if (todo.userId.toString() === req.user._id.toString()) {
+                todo.title = req.body.title;
+                todo.description = req.body.description;
+                todo.isCompleted = req.body.isCompleted;
+
+                return todo.save();
+            } else {
+                return res.status(403).json({
+                    message: "Unauthorized: You can only modify your own todos"
+                });
+            }
+        })
+        .then((updatedTodo) => {
+            if (updatedTodo) {
+                res.json({
+                    message: "Todo updated successfully",
+                    todo: updatedTodo
+                });
+            }
+        })
+        .catch((error) => {
+            res.status(500).json({
+                message: "Error updating todo",
+                error: error
+            });
+        });
+})
+
+// DELETE SPECIFIC TODOS
+app.delete('/todos/:id', authenticateUser, (req, res) => {
+    let todoId = req.params.id;
+    
+    Todo.findById(todoId)
+        .then((todo) => {
+            if (!todo) {
+                return res.status(404).json({
+                    message: "Todo not found"
+                });
+            }
+
+            if (todo.userId.toString() !== req.user._id.toString()) {
+                return res.status(403).json({
+                    message: "Unauthorized: You can only delete your own todos"
+                });
+            }
+
+            return Todo.findByIdAndDelete(todoId);
+        })
+        .then((deletedTodo) => {
+            if (deletedTodo) {
+                res.json({
+                    message: "Todo deleted successfully",
+                    todo: deletedTodo
+                });
+            }
+        })
+        .catch((error) => {
+            res.status(500).json({
+                message: "Error deleting todo",
+                error: error
+            });
+        });
+});
 
 
 // listen on PORT 3000
 app.listen(PORT, () => {
     console.log('Server Started!')
 })
-

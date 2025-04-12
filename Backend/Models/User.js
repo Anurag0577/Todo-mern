@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-let userSchema  = new Schema({
+let userSchema = new Schema({
     username: String,
     email: String,
     password: String
 })
 
-let users = mongoose.model(users, userSchema); // model(< name of the collection in db, not found create new with the same name>)
+let User = mongoose.model('User', userSchema)
 
-module.exports = users;
+module.exports = User;
