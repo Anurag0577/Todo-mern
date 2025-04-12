@@ -18,14 +18,7 @@ cd Backend
 npm install
 ```
 
-2. Create a `.env` file in the Backend directory with the following variables:
-```
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-PORT=3000
-```
-
-3. Start the server:
+2. Start the server:
 ```bash
 node index.js
 ```
@@ -143,7 +136,6 @@ The API uses standard HTTP status codes:
 - mongoose: MongoDB ODM
 - jsonwebtoken: JWT authentication
 - cors: Cross-origin resource sharing
-- dotenv: Environment variable management
 
 ### Project Structure
 
@@ -153,7 +145,6 @@ Backend/
 ├── Models/
 │   ├── User.js      # User model
 │   └── Todos.js     # Todo model
-└── .env             # Environment variables
 ```
 
 ### Contributing

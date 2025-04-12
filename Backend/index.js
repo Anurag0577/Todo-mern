@@ -9,19 +9,22 @@ const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const User = require('./Models/User')
 const Todo = require('./Models/Todos')
+require('dotenv').config()
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const app = express()
 
 // Middleware setup
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: process.env.CORS_ORIGIN
+}))
 
 /**
  * MongoDB Connection
  * Connects to the MongoDB Atlas cluster
  */
-mongoose.connect("mongodb+srv://anurag0577:anurag0577@cluster0.afdw2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB connected!"))
     .catch((err) => console.log(err));
 
@@ -31,7 +34,7 @@ mongoose.connect("mongodb+srv://anurag0577:anurag0577@cluster0.afdw2.mongodb.net
  * @returns {string} JWT token
  */
 function generateJwt(user){
-    let token = jwt.sign(user, 'aNuRaG', {expiresIn: '24h'})
+    let token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '24h'})
     return token;
 }
 
@@ -42,7 +45,7 @@ function generateJwt(user){
 function authenticateUser(req, res, next){
     try {
         let token = req.headers.authorization.split(' ')[1];
-        let user = jwt.verify(token, 'aNuRaG');
+        let user = jwt.verify(token, process.env.JWT_SECRET);
         req.user = user;
         next();
     } catch (err) {
