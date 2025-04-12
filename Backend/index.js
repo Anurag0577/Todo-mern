@@ -1,3 +1,8 @@
+/**
+ * Main Server File
+ * Sets up the Express server, MongoDB connection, and defines all API endpoints
+ */
+
 const express = require('express')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
@@ -6,37 +11,37 @@ const User = require('./Models/User')
 const Todo = require('./Models/Todos')
 
 const PORT = 3000
+const app = express()
 
-const app = express() // create an instance of express
+// Middleware setup
+app.use(express.json())
+app.use(cors())
 
-
-app.use(express.json()) // This line is required if you plan to handle JSON data in your requests (like POST requests with JSON bodies). It's a middleware that parses incoming JSON payloads.
-
- // connect with MongoDB cluster0 
+/**
+ * MongoDB Connection
+ * Connects to the MongoDB Atlas cluster
+ */
 mongoose.connect("mongodb+srv://anurag0577:anurag0577@cluster0.afdw2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     .then(() => console.log("MongoDB connected!"))
     .catch((err) => console.log(err));
 
-/*
-API ENDPOINTS ...
-
-POST '/api/login' - login in the app
-POST '/api/signup' - Signup in the app
-GET '/todos' - get all the todos
-POST '/todos' - add new todo
-PUT '/todos/:id' - Edit specific existing todo
-DELETE '/todos/:id' - Delete the specific todo
-*/
-
+/**
+ * JWT Token Generation
+ * @param {Object} user - User object containing user data
+ * @returns {string} JWT token
+ */
 function generateJwt(user){
     let token = jwt.sign(user, 'aNuRaG', {expiresIn: '24h'})
     return token;
 }
 
+/**
+ * Authentication Middleware
+ * Verifies JWT token and attaches user data to request object
+ */
 function authenticateUser(req, res, next){
     try {
         let token = req.headers.authorization.split(' ')[1];
-        console.log(`Token is ${token}`);
         let user = jwt.verify(token, 'aNuRaG');
         req.user = user;
         next();
@@ -47,7 +52,11 @@ function authenticateUser(req, res, next){
     }
 }
 
-//SIGNUP
+/**
+ * User Registration
+ * Creates a new user account
+ * @route POST /api/signup
+ */
 app.post('/api/signup', (req, res) => {
     let newUser = req.body;
     let user = new User({
@@ -55,15 +64,18 @@ app.post('/api/signup', (req, res) => {
         email: newUser.email,
         password: newUser.password
     })
-    let savedUser = user.save()
+    user.save()
     .then(() => {
         let token = generateJwt(newUser)
-        console.log(token)
         res.send("Signup Successfull!")
     })
 })
 
-// LOGIN
+/**
+ * User Login
+ * Authenticates user and returns JWT token
+ * @route POST /api/login
+ */
 app.post('/api/login', (req, res) => {
     let userCred = req.body;
     User.findOne({
@@ -91,8 +103,11 @@ app.post('/api/login', (req, res) => {
     });
 })
 
-
-// GET ALL TODOS
+/**
+ * Get All Todos
+ * Retrieves all todos for the authenticated user
+ * @route GET /todos
+ */
 app.get('/todos', authenticateUser, (req, res) => {
     Todo.find({ userId: req.user._id })
         .then((todos) => {
@@ -106,7 +121,11 @@ app.get('/todos', authenticateUser, (req, res) => {
         });
 });
 
-// ADD NEW TODO
+/**
+ * Create New Todo
+ * Creates a new todo item for the authenticated user
+ * @route POST /todo
+ */
 app.post('/todo', authenticateUser, (req, res) => {
     let newTodo = new Todo({
         userId: req.user._id,
@@ -130,7 +149,11 @@ app.post('/todo', authenticateUser, (req, res) => {
     });
 });
 
-// MODIFY EXISTING TODO
+/**
+ * Update Todo
+ * Modifies an existing todo item
+ * @route PUT /todos/:id
+ */
 app.put('/todos/:id', authenticateUser, (req, res) => {
     let todoId = req.params.id;
     
@@ -170,7 +193,11 @@ app.put('/todos/:id', authenticateUser, (req, res) => {
         });
 })
 
-// DELETE SPECIFIC TODOS
+/**
+ * Delete Todo
+ * Removes a todo item
+ * @route DELETE /todos/:id
+ */
 app.delete('/todos/:id', authenticateUser, (req, res) => {
     let todoId = req.params.id;
     
@@ -206,8 +233,7 @@ app.delete('/todos/:id', authenticateUser, (req, res) => {
         });
 });
 
-
-// listen on PORT 3000
+// Start the server
 app.listen(PORT, () => {
     console.log('Server Started!')
 })
