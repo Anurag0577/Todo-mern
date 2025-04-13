@@ -9,22 +9,19 @@ const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const User = require('./Models/User')
 const Todo = require('./Models/Todos')
-require('dotenv').config()
 
-const PORT = process.env.PORT || 3000
+const PORT = 3000
 const app = express()
 
 // Middleware setup
 app.use(express.json())
-app.use(cors({
-    origin: process.env.CORS_ORIGIN
-}))
+app.use(cors())
 
 /**
  * MongoDB Connection
  * Connects to the MongoDB Atlas cluster
  */
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect("mongodb+srv://anurag0577:anurag0577@cluster0.afdw2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     .then(() => console.log("MongoDB connected!"))
     .catch((err) => console.log(err));
 
@@ -34,7 +31,13 @@ mongoose.connect(process.env.MONGODB_URI)
  * @returns {string} JWT token
  */
 function generateJwt(user){
-    let token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '24h'})
+    // Create a plain object with only the necessary user data
+    const payload = {
+        _id: user._id,
+        username: user.username,
+        email: user.email
+    };
+    let token = jwt.sign(payload, 'aNuRaG', {expiresIn: '24h'})
     return token;
 }
 
@@ -45,7 +48,7 @@ function generateJwt(user){
 function authenticateUser(req, res, next){
     try {
         let token = req.headers.authorization.split(' ')[1];
-        let user = jwt.verify(token, process.env.JWT_SECRET);
+        let user = jwt.verify(token, 'aNuRaG');
         req.user = user;
         next();
     } catch (err) {
@@ -81,27 +84,33 @@ app.post('/api/signup', (req, res) => {
  */
 app.post('/api/login', (req, res) => {
     let userCred = req.body;
+    console.log('Login attempt with credentials:', userCred);
+    
     User.findOne({
         username: userCred.username,
         password: userCred.password
     })
     .then((user) => {
         if(user) {
+            console.log('User found:', user);
             let token = generateJwt(user);
             res.json({
                 message: "Login Successful!",
                 token: token
             });
+            localStorage.setItem('token', token);
         } else {
+            console.log('No user found with these credentials');
             res.status(401).json({
                 message: "Invalid username or password"
             });
         }
     })
     .catch((err) => {
+        console.error('Login error:', err);
         res.status(500).json({
             message: "Error during login",
-            error: err
+            error: err.message
         });
     });
 })
