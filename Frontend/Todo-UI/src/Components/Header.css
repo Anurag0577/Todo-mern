@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #646cff;
+    --secondary-color: #535bf2;
+    --text-color: rgba(0, 0, 0);
+  --font-family: 'Poppins';
+}
+
+body, button, div {
+  font-family: var(--font-family);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.header{
+    padding: 0.5rem 2rem
+}
+
+.header-container{
+    display: flex;
+    justify-content:space-between;
+}
+
+.logout-btn{
+    font-size: 1rem;
+    padding: 1px 30px;
+    background-color: unset;
+    border: 2px solid black;
+    border-radius: 8px;
+    transition: background-color 0.1s ease-in-out, transform 0.3s ease, color 0.1s ease;
+}
+
+.logout-btn:hover{
+    background-color: black;
+    color: white;
+    transform: scale(1.05)
+}
+
+.logo-text{
+    font-weight: bolder;
+    font-size: xx-large;
+    letter-spacing: -1.5px;
+}
+
