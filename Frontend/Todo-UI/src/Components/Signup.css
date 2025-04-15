@@ -2,28 +2,51 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-.signup-page{
+  }
+  
+  .header {
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 2px solid #ddd;
+    padding: 0.3rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo-text {
+    letter-spacing: -1.5px;
+    font-weight: bolder;
+    text-align: center;
+    font-size: 1.8rem;
+  }
+  
+  .signup-page {
     min-height: 100vh;
-    width: 100vw;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+  }
+  
+  .signup-form {
+    flex: 1;
+    display: flex;
     justify-content: center;
-}
-
-.signup-page-container {
+    align-items: center;
+  }
+  
+  .signup-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     max-width: 400px;
+    width: 90%;
     margin: 2rem auto;
     padding: 2rem;
     background-color: #ffffff;
     border: 2px solid #ddd;
     border-radius: 8px;
-}
+  }
 
 .username-label,
 .email-label,

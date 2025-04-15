@@ -73,7 +73,7 @@ app.post('/api/signup', (req, res) => {
     user.save()
     .then(() => {
         let token = generateJwt(newUser)
-        res.send("Signup Successfull!")
+        res.send("Signup Successfull!", )
     })
 })
 

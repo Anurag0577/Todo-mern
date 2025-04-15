@@ -2,50 +2,73 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-.login-page{
+  }
+  
+  .header {
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 2px solid #ddd;
+    padding: 0.3rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo-text {
+    letter-spacing: -1.5px;
+    font-weight: bolder;
+    text-align: center;
+    font-size: 1.8rem;
+  }
+  
+  .login-page {
     min-height: 100vh;
-    width: 100vw;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+  }
+  
+  .login-form {
+    flex: 1;
+    display: flex;
     justify-content: center;
-}
-
-.login-page-container {
+    align-items: center;
+  }
+  
+  .login-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     max-width: 400px;
+    width: 90%;
     margin: 2rem auto;
     padding: 2rem;
     background-color: #ffffff;
     border: 2px solid #ddd;
     border-radius: 8px;
-}
-
-.username-label,
-.email-label,
-.password-label {
+  }
+  
+  .username-label,
+  .email-label,
+  .password-label {
     display: block;
     margin-bottom: 0.1rem;
     font-weight: 500;
     color: #333;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 1.3rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
-}
-
-.login-btn {
+  }
+  
+  .login-btn {
     width: 100%;
     padding: 0.75rem;
     background-color: #000;
@@ -55,21 +78,22 @@ input[type="password"] {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.login-btn:hover {
+  }
+  
+  .login-btn:hover {
     background-color: #333;
-} 
-
-.login-underline-btn{
+  }
+  
+  .login-underline-btn {
     display: flex;
-    justify-self: center;
-}
-
-.login-underline-btn a{
+    justify-content: center;
+  }
+  
+  .login-underline-btn a {
     margin-left: 5px;
-}
-
-.login-container{
+  }
+  
+  .login-container {
     padding-top: 30px;
-}
+    width: 100%;
+  }
