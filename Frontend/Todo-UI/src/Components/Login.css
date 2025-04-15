@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-.signup-page{
+.login-page{
     min-height: 100vh;
     width: 100vw;
     display: flex;
@@ -12,7 +12,7 @@
     justify-content: center;
 }
 
-.signup-page-container {
+.login-page-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -45,7 +45,7 @@ input[type="password"] {
     font-size: 1rem;
 }
 
-.signup-btn {
+.login-btn {
     width: 100%;
     padding: 0.75rem;
     background-color: #000;
@@ -57,7 +57,7 @@ input[type="password"] {
     transition: background-color 0.3s ease;
 }
 
-.signup-btn:hover {
+.login-btn:hover {
     background-color: #333;
 } 
 
@@ -70,6 +70,6 @@ input[type="password"] {
     margin-left: 5px;
 }
 
-.signup-container{
+.login-container{
     padding-top: 30px;
 }

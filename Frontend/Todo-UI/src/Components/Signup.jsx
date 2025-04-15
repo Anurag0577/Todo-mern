@@ -6,8 +6,9 @@ function Signup() {
 
     return <>
         <div className='signup-page'>
-            <h1>Create an account</h1>
-            <small>Enter your detail below to create your acccount</small>
+            <div className='signup-page-container'>
+            <h1 style={{letterSpacing: -1.5, lineHeight: 1}}>Create an account</h1>
+            <small style={{textAlign: 'center'}}>Enter your detail below to create your acccount</small>
             <div className='signup-container'>
                 <label htmlFor="username" className='username-label'>Username</label>
                 <input type="text" id="username" name="username" placeholder="John"></input>
@@ -18,6 +19,8 @@ function Signup() {
                 <button type='submit' className='signup-btn'> Create an Account </button>
                 <small className='login-underline-btn' style={{color: 'black'}}>Already have account? <a href='#' style={{textDecoration: 'underline', color: 'black'}}>Login</a>.</small>
             </div>
+            </div>
+            
             </div>
     </>
 }
