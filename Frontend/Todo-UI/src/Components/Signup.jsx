@@ -1,4 +1,6 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import './Signup.css'
 
 
@@ -7,7 +9,7 @@ function Signup() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const navigate = useNavigate();
     function fetchingData(){
             fetch('http://localhost:3000/api/signup', {
                 method: 'POST',
@@ -30,10 +32,10 @@ function Signup() {
                 console.log(data);
                 let token = JSON.stringify(data);
                 localStorage.setItem('Token', token);
+                navigate('/login');
             })
              .catch((err) => console.log(err))
     }
-
 
     return <>
     <div className='signup-page'>

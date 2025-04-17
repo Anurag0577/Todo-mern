@@ -1,12 +1,13 @@
 import React from 'react';
 import './Login.css';
 import {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
+
 
 function Login() {
   const[username, setUsername] = useState('')
   const[password, setPassword] = useState('')
-
-
+  const navigate = useNavigate();
 
   function fetchData(){
     fetch('http://localhost:3000/api/login', {
@@ -29,10 +30,11 @@ function Login() {
     let token = JSON.stringify(data);
     console.log(token);
     localStorage.setItem('Token', token)
+    navigate('/todos')
    })
    .catch((error) => console.log(error))
   }
-
+  
   return (
     <>
       <div className="login-page">

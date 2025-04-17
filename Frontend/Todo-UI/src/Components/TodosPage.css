@@ -14,7 +14,7 @@
     background-color: #f9f9f9;
   }
   
-  /* Header */
+
   .todo-page-header {
     position: relative;
     display: flex;
@@ -47,14 +47,14 @@
     z-index: 1;
   }
   
-  /* Main Content */
+
   .todo-content {
     display: flex;
     height: 80vh;
     column-gap: 2rem;
   }
   
-  /* Left Container */
+
   .lhs-container {
     max-width: 20%;
     margin: 2rem 0.1rem 2rem 2rem;
@@ -85,7 +85,7 @@
     transition: transform 0.3s ease;
   }
   
-  /* Right Container (Pinterest Style) */
+
   .rhs-container {
     flex: 1;
     padding: 2rem;
@@ -99,7 +99,6 @@
     background-color: #fff;
   }
   
-  /* Responsive Column Count */
   @media (max-width: 1024px) {
     .rhs-container {
       column-count: 2;
@@ -112,7 +111,7 @@
     }
   }
   
-  /* Todo Elements */
+
   .todo-element {
     display: flex;
     flex-direction: row;
@@ -128,8 +127,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     cursor: pointer;
   }
-  
-  /* Checkbox */
+
   .todo-data-checkbox {
     flex-shrink: 0;
     width: 24px;
@@ -137,7 +135,7 @@
     margin-top: 0.4rem;
   }
   
-  /* Content */
+
   .todo-data {
     flex-grow: 1;
   }
@@ -160,3 +158,62 @@
     font-size: 0.85rem;
   }
   
+.addTodo-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+
+.addTodo-form-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.addTodo-container input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+
+.addTodo-btn {
+  background-color: black;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: transform 0.2s ease;
+}
+
+.addTodo-btn:hover {
+  transform: scale(1.02);
+}
