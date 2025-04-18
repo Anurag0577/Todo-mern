@@ -2,20 +2,35 @@ import React from 'react'
 import Signup from './Components/Signup'
 import Login from './Components/Login'
 import TodosPage from './Components/TodosPage'
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import './App.css'
 
 function App() {
+
+  let router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Login/>,
+      errorElement: <h1>404 ot found!</h1>
+    },
+    {
+      path: '/login',
+      element: <Login/>,    
+    },
+    {
+      path: '/signup',
+      element: <Signup/>,
+    },
+    {
+      path: '/Todos',
+      element: <TodosPage/>,
+    }
+  ])
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Navigate to="/login" replace />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path="/todos" element={<TodosPage />} />
-      </Routes>
-    </BrowserRouter>
+
+      <RouterProvider router={router}></RouterProvider>
+
     </>
   )
 }

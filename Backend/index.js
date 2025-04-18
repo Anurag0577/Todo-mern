@@ -65,15 +65,16 @@ function authenticateUser(req, res, next){
  */
 app.post('/api/signup', (req, res) => {
     let newUser = req.body;
+    console.log(newUser);
     let user = new User({
         username: newUser.username,
         email: newUser.email,
         password: newUser.password
     })
     user.save()
-    .then(() => {
-        let token = generateJwt(newUser)
-        res.send("Signup Successfull!", )
+    .then((savedUser) => {
+        let token = generateJwt(savedUser)
+        res.json({message: 'Signup successfull', token: token})
     })
 })
 
@@ -95,10 +96,8 @@ app.post('/api/login', (req, res) => {
             console.log('User found:', user);
             let token = generateJwt(user);
             res.json({
-                message: "Login Successful!",
                 token: token
             });
-            localStorage.setItem('token', token);
         } else {
             console.log('No user found with these credentials');
             res.status(401).json({

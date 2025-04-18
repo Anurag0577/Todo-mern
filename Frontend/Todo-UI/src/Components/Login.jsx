@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
+  const navigate = useNavigate();
   const[username, setUsername] = useState('')
   const[password, setPassword] = useState('')
-  const navigate = useNavigate();
 
   function fetchData(){
     fetch('http://localhost:3000/api/login', {
@@ -27,10 +27,12 @@ function Login() {
       return response.json();
    } )
    .then((data) => {
-    let token = JSON.stringify(data);
-    console.log(token);
+    let token =  data.token;
+    console.log( "token recieved", token);
     localStorage.setItem('Token', token)
+
     navigate('/todos')
+
    })
    .catch((error) => console.log(error))
   }
