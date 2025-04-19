@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TodosPage.css';
 
+// EDIT TODO POPUP
 function FetchData({ onClose, prevTitle, prevDescription, id, refreshTodos }) {
   const [title, setTitle] = useState(prevTitle);
   const [description, setDescription] = useState(prevDescription);
@@ -27,14 +28,15 @@ function FetchData({ onClose, prevTitle, prevDescription, id, refreshTodos }) {
     })
     .then((data) => {
       console.log('Todo updated successfully:', data);
-      refreshTodos(); // Refresh the todos list after updating
-      onClose(); // Close the modal
+      refreshTodos(); 
+      onClose(); 
     })
     .catch((error) => {
       console.error('Error updating todo:', error);
     });
   }
 
+  //EDIT FORM
   return (
     <div className='editTodo-form'>
       <div className='editTodo-form-container'>
@@ -67,6 +69,7 @@ function FetchData({ onClose, prevTitle, prevDescription, id, refreshTodos }) {
   );
 }
 
+// ADD NEW TODO
 function FetchingData({ onClose, refreshTodos }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -102,6 +105,7 @@ function FetchingData({ onClose, refreshTodos }) {
     });
   }
 
+  // ADD NEW TODO FORM POPUP
   return (
     <div className='editTodo-form'>
       <div className='editTodo-form-container'>
@@ -134,6 +138,8 @@ function FetchingData({ onClose, refreshTodos }) {
   );
 }
 
+
+// COMPLETE TODO PAGE
 function TodosPage() {
   const [todos, setTodos] = useState([]);
   const [showModel, setShowModel] = useState(false);
@@ -158,7 +164,6 @@ function TodosPage() {
     })
     .then((data) => {
       console.log('Fetched todos:', data);
-      // Handle both array and object responses
       if (Array.isArray(data)) {
         setTodos(data);
       } else if (data && Array.isArray(data.todos)) {
@@ -178,6 +183,8 @@ function TodosPage() {
     fetchTodos();
   }, []);
 
+
+  // DELETE TODO 
   function deleteTodo(id) {
     const token = localStorage.getItem('Token');
     fetch(`http://localhost:3000/todos/${id}`, {
@@ -200,12 +207,49 @@ function TodosPage() {
     .catch((error) => console.log(error));
   }
 
-  function todoToggle(index) {
+
+  // CODE FOR CHECKBOX
+  function todoToggle(index, id) {
+    const updatedTodo = { ...todos[index], isCompleted: !todos[index].isCompleted }; 
+    const token = localStorage.getItem('Token'); 
+  
     setTodos((prevTodos) =>
       prevTodos.map((todo, i) =>
-        i === index ? { ...todo, isCompleted: !todo.isCompleted } : todo
+        i === index ? updatedTodo : todo
       )
     );
+  
+    
+    fetch(`http://localhost:3000/todos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        title: updatedTodo.title,
+        description: updatedTodo.description,
+        isCompleted: updatedTodo.isCompleted
+      })
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to update todo status');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Todo status updated successfully:', data);
+      })
+      .catch((error) => {
+        console.error('Error updating todo status:', error);
+        // Revert the state change if the request fails
+        setTodos((prevTodos) =>
+          prevTodos.map((todo, i) =>
+            i === index ? { ...todo, isCompleted: !updatedTodo.isCompleted } : todo
+          )
+        );
+      });
   }
 
   function handleEditClick(todoItem) {
@@ -213,7 +257,7 @@ function TodosPage() {
     setShowEditModel(true);
   }
 
-  // Safety check before rendering todos
+// EACH TODO ELEMENT
   const todoElements = Array.isArray(todos) ? todos.map((element, index) => {
     return (
       <div key={index} className='todo-element'>
@@ -221,11 +265,11 @@ function TodosPage() {
           type='checkbox'
           className='todo-data-checkbox'
           checked={element.isCompleted}
-          onChange={() => todoToggle(index)}
+          onChange={() => todoToggle(index, element._id)}
         />
-        <div className='todo-data' onClick={() => todoToggle(index)}>
-          <h2 className='todo-title'>{element.title}</h2>
-          <p className='todo-description'>{element.description}</p>
+        <div className='todo-data' >
+          <h2 className='todo-title' onClick={() => todoToggle(index, element._id)}>{element.title}</h2>
+          <p className='todo-description' onClick={() => todoToggle(index, element._id)}>{element.description}</p>
           <div className='todo-bottom-bar'>
             <small style={{flex:1}}>{element.isCompleted ? 'Completed' : 'Uncompleted'}</small>
             <small className="material-symbols-outlined" onClick={() => deleteTodo(element._id)}>Delete</small>
@@ -236,6 +280,7 @@ function TodosPage() {
     );
   }) : <p>No todos available</p>;
 
+  // WHOLE PAGE 
   return (
     <> 
       <div className='todo-page-container'>
