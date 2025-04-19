@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 import './Signup.css'
+import { useNavigate } from 'react-router-dom';
 
 
 function Signup() {
-
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -51,7 +52,7 @@ function Signup() {
                 <label htmlFor='password' className='password-label'>Password</label>
                 <input type="password" className="password" id='password' value={password} onChange={(e)=> setPassword(e.target.value)} ></input>
                 <button type='button' className='signup-btn' onClick={() => fetchingData()}> Create an Account </button>
-                <small className='login-underline-btn' style={{color: 'black'}}>Already have account? <a href='#' style={{textDecoration: 'underline', color: 'black'}}>Login</a>.</small>
+                <small className='login-underline-btn' style={{color: '#666'}}>Already have account? <a href='#' style={{textDecoration: 'underline', color: '#666'}} onClick={() => navigate('/login') }>Login</a></small>
             </div>
             </div>
         </div>

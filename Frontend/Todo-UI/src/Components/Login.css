@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -11,14 +12,16 @@
     padding: 0.3rem 0;
     position: sticky;
     top: 0;
+    height: 46px;
     z-index: 100;
   }
   
   .logo-text {
     letter-spacing: -1.5px;
-    font-weight: bolder;
+    font-weight: 800;
     text-align: center;
     font-size: 1.8rem;
+    font-family: "DM Sans", sans-serif;
   }
   
   .login-page {
@@ -46,6 +49,13 @@
     background-color: #ffffff;
     border: 2px solid #ddd;
     border-radius: 8px;
+  }
+
+  .login-form-container h1{
+    letter-spacing: -2.2px;
+    line-height: 0.8;
+    margin-bottom: 0.5rem;
+    text-align: center;
   }
   
   .username-label,
@@ -78,6 +88,7 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 0.5rem;
   }
   
   .login-btn:hover {

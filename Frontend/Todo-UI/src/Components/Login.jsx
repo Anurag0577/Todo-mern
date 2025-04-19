@@ -55,9 +55,9 @@ function Login() {
               <label htmlFor="password" className="password-label">Password</label>
               <input type="password" className="password" value={password} onChange={(e) => setPassword(e.target.value)}  id="password" />
               <button type="button" className="login-btn"onClick={fetchData} >Login</button>
-              <small className="login-underline-btn" style={{ color: 'black' }}>
+              <small className="login-underline-btn" style={{ color: '#666' }} onClick={() => navigate('/signup')}>
                 New to the site?{' '}
-                <a href="#" style={{ textDecoration: 'underline', color: 'black' }}>
+                <a href="#" style={{ textDecoration: 'underline', color: '#666' }}>
                   Sign up
                 </a>.
               </small>

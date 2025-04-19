@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './TodosPage.css';
+import { useNavigate } from 'react-router-dom';
+
+
+function accountLogout(navigate){
+
+  localStorage.removeItem('Token');
+  navigate('/login')
+}
 
 // EDIT TODO POPUP
 function FetchData({ onClose, prevTitle, prevDescription, id, refreshTodos }) {
@@ -42,7 +50,7 @@ function FetchData({ onClose, prevTitle, prevDescription, id, refreshTodos }) {
       <div className='editTodo-form-container'>
         <button onClick={onClose} className='close-btn'>X</button>
         <h1 style={{ letterSpacing: -1.5, lineHeight: 1 }}>Edit todo</h1>
-        <small style={{ textAlign: 'center' }}>Update the details of your todo</small>
+        <p style={{ textAlign: 'center' }}>Update the details of your todo</p>
         <div className='editTodo-container'>
           <label htmlFor="edit-title" className='title-label'>Title</label>
           <input
@@ -111,7 +119,7 @@ function FetchingData({ onClose, refreshTodos }) {
       <div className='editTodo-form-container'>
         <button onClick={onClose} className='close-btn'>X</button>
         <h1 style={{ letterSpacing: -1.5, lineHeight: 1 }}>Add new todo</h1>
-        <small style={{ textAlign: 'center' }}>Enter the following details to add a new todo</small>
+        <p style={{ textAlign: 'center' }}>Enter the following details to add a new todo</p>
         <div className='editTodo-container'>
           <label htmlFor="title" className='title-label'>Title</label>
           <input
@@ -141,6 +149,7 @@ function FetchingData({ onClose, refreshTodos }) {
 
 // COMPLETE TODO PAGE
 function TodosPage() {
+  const navigate = useNavigate();
   const [todos, setTodos] = useState([]);
   const [showModel, setShowModel] = useState(false);
   const [showEditModel, setShowEditModel] = useState(false);
@@ -272,8 +281,9 @@ function TodosPage() {
           <p className='todo-description' onClick={() => todoToggle(index, element._id)}>{element.description}</p>
           <div className='todo-bottom-bar'>
             <small style={{flex:1}}>{element.isCompleted ? 'Completed' : 'Uncompleted'}</small>
-            <small className="material-symbols-outlined" onClick={() => deleteTodo(element._id)}>Delete</small>
             <small className="material-symbols-outlined" onClick={() => handleEditClick(element)}>Edit</small>
+            <small className="material-symbols-outlined" onClick={() => deleteTodo(element._id)}>Delete</small>
+            
           </div>
         </div>
       </div>
@@ -285,7 +295,7 @@ function TodosPage() {
     <> 
       <div className='todo-page-container'>
         <div className='todo-page-header'>
-          <button type='button' className='logout-button'>
+          <button type='button' className='logout-button' onClick={() => accountLogout(navigate)}>
             Logout
           </button>
           <h1 className='logo-text'>Todo App</h1>
