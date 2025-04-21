@@ -31,6 +31,8 @@ function Signup() {
                 console.log(data);
                 let token = JSON.stringify(data);
                 localStorage.setItem('Token', token);
+
+                navigate('/login')
             })
              .catch((err) => console.log(err))
     }
